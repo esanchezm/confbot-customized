@@ -124,7 +124,7 @@ def getdisplayname(x):
 		x = x[:x.find("/")]
 	if '@' in x and x[x.find('@'):] == "@" + server:
 		x = x[:x.find("@")]
-	return conf.nicks.x if x in conf.nicks else x
+	return conf.nicks[x] if x in conf.nicks else x
 
 def getjid(x):
 	"returns a full jid from a display name"

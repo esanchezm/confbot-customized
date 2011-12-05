@@ -232,11 +232,11 @@ def sendtoall(msg,butnot=[],including=[]):
 	for i in r.getJIDs():
 		if getdisplayname(i) in butnot:
 			continue
-		state=r.isOnline(i)
+#		state=r.isOnline(i)
 		if has_userflag(getdisplayname(i), 'away'): #away is represent user don't want to chat
 			continue
-		if r.isOnline(i) and r.getShow(i) in ['available','chat','online',None]:
-			sendtoone(i, msg)
+#		if r.isOnline(i) and r.getShow(i) in ['available','chat','online',None]:
+		sendtoone(i, msg)
 	if not msg.startswith(conf.general['sysprompt']):
 		lastlog.append(msg)
 	if len(lastlog)>5:
@@ -259,9 +259,9 @@ def sendtoadmin(msg,butnot=[],including=[]):
 		state=r.getShow(unicode(i))
 		if has_userflag(getdisplayname(i), 'away'): #away is represent user don't want to chat
 			continue
-		if state in ['available','chat','online',None] or getdisplayname(i) in including :
-			sendtoone(i,msg)
-			time.sleep(.2)
+#		if state in ['available','chat','online',None] or getdisplayname(i) in including :
+		sendtoone(i,msg)
+		time.sleep(.2)
 	if not msg.startswith(conf.general['sysprompt']):
 		lastlog.append(msg)
 	if len(lastlog)>5:
@@ -782,8 +782,8 @@ def messageCB(con,msg):
 			sendtoall('<%s> %s' % (getdisplayname(msg.getFrom()),msg.getBody()),
 				butnot=[getdisplayname(msg.getFrom())],
 				)
-			if con.getRoster().getShow(msg.getFrom().getStripped()) not in ['available','chat','online',None]:
-				systoone(msg.getFrom(), _('Warning: You are marked as "busy" in your client,\nyou will not see other people talk,\nset yourself "available" in your client to see their replies.'))
+#			if con.getRoster().getShow(msg.getFrom().getStripped()) not in ['available','chat','online',None]:
+#				systoone(msg.getFrom(), _('Warning: You are marked as "busy" in your client,\nyou will not see other people talk,\nset yourself "available" in your client to see their replies.'))
 	xmllogf.flush() # just so flushes happen regularly
 
 

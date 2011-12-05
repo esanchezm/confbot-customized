@@ -124,7 +124,7 @@ def getdisplayname(x):
 		x = x[:x.find("/")]
 	if '@' in x and x[x.find('@'):] == "@" + server:
 		x = x[:x.find("@")]
-	return x
+	return conf.nicks.x if x in conf.nicks else x
 
 def getjid(x):
 	"returns a full jid from a display name"
@@ -413,6 +413,11 @@ def cmd_msg(who, msg):
 			return
 		sendtoone(getjid(target), _('*<%s>* %s').para(getdisplayname(who), msg))
 		systoone(who, _('>%s> %s').para(getdisplayname(target), msg))
+
+def cmd_nick(who, new_nick):
+	'"/nick new_nick" Changes your nick'
+        conf.nicks[who] = new_nick
+	saveconfig()
 
 def acmd_boot(who, msg):
 	'"/boot" The same as /kick'
@@ -909,7 +914,7 @@ def readconfig():
 	conf.emotes.keeldie = _('keels over and dies')
 	conf.emotes.clap = _('claps')
 	conf.emotes.laugh = _('laughs')
-	
+
 	if len(sys.argv)>1:
 		conf.setfilename(sys.argv[1])
 		conf.read(sys.argv[1])
@@ -936,7 +941,7 @@ def readconfig():
 		print _("Input super admin email account:"),
 		admin = raw_input()
 		conf.userinfo[admin] = ['user', 'super']
-			
+
 	#deal with welcome message
 	if os.path.exists('welcome.txt'):
 		welcome = unicode(file('welcome.txt').read(), encoding)
@@ -954,6 +959,9 @@ def saveconfig():
 		for key, value in conf.emotes.items():
 			conf.emotes[key] = value.encode(encoding)
 			
+		for key, value in conf.nicks.items():
+			conf.nicks[key] = value.encode(encoding)
+
 		conf.save()
 		file('welcome.txt', 'w').write(welcome.encode(encoding))
 	except:
@@ -968,6 +976,7 @@ def connect():
 	if debug:
 		print '>>> debug is [%d]' % general['debug']
 		print '>>> host is [%s]' %general['server']
+		print '>>> nicknames are [%s]' %conf.nicks
 		print '>>> account is [%s]' % general['account']
 		print '>>> resource is [%s]' % general['resource']
 	con = jabber.Client(host=general['server'],debug=False ,log=xmllogf,
